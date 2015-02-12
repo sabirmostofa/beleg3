@@ -531,9 +531,9 @@ class theFrame extends JFrame {
 				resetGraph();
 				getContentPane().removeAll();
 				addButtons();
-				int numNodes = 5;
+				int numNodes = 10;
 				// maximum lines
-				int numLines = 7;
+				int numLines = 15;
 				 
 				nod.randomVals(numNodes, numLines);
 				Ln.linesFromMatrix(nod.aMatrix, nod.Nxy , numNodes);
