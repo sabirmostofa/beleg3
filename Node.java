@@ -57,8 +57,8 @@ class Node {
 		// generate nodes
 		for(int i = 0; i < nodes; i++){
 			
-			Nxy[i][0]= getRand(900,200);
-			Nxy[i][1]= getRand(600,160);
+			Nxy[i][0]= getRand(1000,200);
+			Nxy[i][1]= getRand(680,150);
 		    ellipses[i] = new Ellipse2D.Double(Nxy[i][0],Nxy[i][1], 30, 30);
 		    nodName[i] = (char)(65 + i) + "";  
 			
@@ -108,8 +108,9 @@ class Node {
 		System.out.println("Prining Adjacency Matrix");
 		System.out.println("========================");
 		
+		System.out.print("     ");
 		for(int i = 0; i < nodeCount; i++){
-			System.out.print(nodName[i] + "    "  );
+			System.out.print(nodName[i] + "   "  );
 			
 			
 		}

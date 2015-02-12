@@ -36,14 +36,20 @@ class theFrame extends JFrame {
 	public int nCount = 0, lCount = 0, searchCount = 0;
 	
 	
+	
 	public theFrame() {
 		setTitle("Graph Maker");
 		setBounds(0,0,1300,800);
 		setLayout(null);
 		addMouseListener(new My_Mouse());
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(EXIT_ON_CLOSE);	
+		addButtons();
 		
 		
+	}
+	
+	public void addButtons(){
+
 		// ---------------Creating nodes and lines:--------------
 		add(T_nodeMk = new JTextField(15));
 		T_nodeMk.setBounds(50,25,125,30);
@@ -80,31 +86,31 @@ class theFrame extends JFrame {
 		
 		
 		// ---------------Deleting nodes and lines:--------------
-		add(T_nodeRm = new JTextField(15));
-		T_nodeRm.setBounds(450,25,125,30);
-		T_nodeRm.setBackground(Color.gray.brighter());
+		//add(T_nodeRm = new JTextField(15));
+		//T_nodeRm.setBounds(450,25,125,30);
+		//T_nodeRm.setBackground(Color.gray.brighter());
 	//	T_nodeRm.addActionListener(new Action(1));
-		add(B_nodeRm = new JButton("Delete Node"));
-		B_nodeRm.setBounds(625,25,125,30);
+		add(B_nodeRm = new JButton("Delete Node/Line"));
+		B_nodeRm.setBounds(480,115,200,30);
 		B_nodeRm.setBackground(Color.gray.brighter());
 	    B_nodeRm.addActionListener(new Action(7));
 		
-		add(B_lineRm = new JButton("Delete Line"));
-		B_lineRm.setBounds(625,55,125,30);
-		B_lineRm.setBackground(Color.gray.brighter());
+		//add(B_lineRm = new JButton("Delete Line"));
+		//B_lineRm.setBounds(625,55,125,30);
+		//B_lineRm.setBackground(Color.gray.brighter());
 	//	B_lineRm.addActionListener(new Action(1));
 		
-		add(L_start2 = new JLabel("Start:"));
-		L_start2.setBounds(490,85,125,30);
-			add(T_lineRm_start = new JTextField(15));
-		T_lineRm_start.setBounds(450,115,125,30);
-		T_lineRm_start.setBackground(Color.gray.brighter());
+		//add(L_start2 = new JLabel("Start:"));
+		//L_start2.setBounds(490,85,125,30);
+			//add(T_lineRm_start = new JTextField(15));
+		//T_lineRm_start.setBounds(450,115,125,30);
+		//T_lineRm_start.setBackground(Color.gray.brighter());
 	//	T_lineRm_start.addActionListener(new Action(1));
-		add(L_dest2 = new JLabel("Destination:"));
-		L_dest2.setBounds(645,85,125,30);
-		add(T_lineRm_dest = new JTextField(15));
-		T_lineRm_dest.setBounds(625,115,125,30);
-		T_lineRm_dest.setBackground(Color.gray.brighter());
+		//add(L_dest2 = new JLabel("Destination:"));
+		//L_dest2.setBounds(645,85,125,30);
+		//add(T_lineRm_dest = new JTextField(15));
+		//T_lineRm_dest.setBounds(625,115,125,30);
+		//T_lineRm_dest.setBackground(Color.gray.brighter());
 	//	T_lineRm_dest.addActionListener(new Action(1));
 			
 		//-----------------Save and load graphs----------------------
@@ -142,14 +148,8 @@ class theFrame extends JFrame {
 	//	B_AdjMatrix.addActionListener(new Action(1));
 		
 		
-		
-		
-		
 	}
-	
-	public void cleanNulls(){
-		
-	}
+
 	
 	// MouseAdapter is always active and waits for one of the methods to be executed.
 	class My_Mouse extends MouseAdapter {
@@ -166,21 +166,25 @@ class theFrame extends JFrame {
 						continue;
 					if(nod.ellipses[i].contains(x,y)){
 						System.out.println("deleting node");
+						int prex = nod.Nxy[i][0];
+						int prey = nod.Nxy[i][1];
 						nod.Nxy[i][0] = 0;
 						nod.Nxy[i][1] = 0;
-						nod.nodName[i] = "";
+						nod.nodName[i] = null;
 						nod.ellipses[i] = null;
-						nCount -= 1;
+						
 						
 						//delete respective lines offset set to 15
-						for( i= 0; i< lCount ; i++){
-							if((Ln.Lxy[i][0] == x && Ln.Lxy[i][1] == y) ||(Ln.Lxy[i][2] == x && Ln.Lxy[i][3] == y) ){
-								Ln.Lxy[i][0] =0;
-								Ln.Lxy[i][1] =0;
-								Ln.Lxy[i][2] =0;
-								Ln.Lxy[i][3] =0;
-								Ln.lines[i] = null; // set line2d to null
-								lCount -= 1;
+						for(int j= 0; j< lCount ; j++){
+							if((Ln.Lxy[j][0] == prex && Ln.Lxy[j][1] == prey) ||(Ln.Lxy[j][2] == prex && Ln.Lxy[j][3] == prey) ){
+								Ln.Lvalue[j] = 0;
+								Ln.Lxy[j][0] =0;
+								Ln.Lxy[j][1] =0;
+								Ln.Lxy[j][2] =0;
+								Ln.Lxy[j][3] =0;
+								Ln.lines[j] = null; // set line2d to null
+								System.out.println("deleting line according to the node");
+								
 								
 							}						
 						}			
@@ -191,25 +195,26 @@ class theFrame extends JFrame {
 				
 				//remove null elements from nod an Ln
 				
-				cleanNulls();
+			
 				
 				//delete line
 	           for( int i= 0; i< lCount ; i++){
 	        	   if(Ln.lines[i] == null)
 	        		   continue;
-	        	   if(Ln.lines[i].intersects(x, y,30,30)){
+	        	   if(Ln.lines[i].intersects(x, y,10,10)){
 	        		   System.out.println("deleting line");
+	        		   Ln.Lvalue[i] = 0;
 	        		   Ln.Lxy[i][0] = 0;
 	        		   Ln.Lxy[i][1] = 0;
 	        		   Ln.Lxy[i][2] = 0;
 	        		   Ln.Lxy[i][3] = 0;
 	        		   Ln.lines[i] = null;
-	        		   lCount -= 1;
+	        		   
 	        	   }
 					
 				}
 	           
-	           cleanNulls();
+	         
 				
 				
 				
@@ -245,7 +250,7 @@ class theFrame extends JFrame {
 		for (int i = 0; i < nCount; i++) {
 			
 			//continue if deleted
-			if(nod.ellipses[i] == null)
+			if(nod.ellipses[i] == null || nod.nodName[i].equals("null"))
 				continue;
 			g.setColor(Color.green);
 			/**
@@ -260,7 +265,7 @@ class theFrame extends JFrame {
 		
 		// Draw Lines:
 		for (int i = 0; i < lCount; i++) {
-			if(Ln.lines[i] == null)
+			if(Ln.lines[i] == null || Ln.Lvalue[i] == 0)
 				continue;
 			g.setColor(Color.red);
 			g2.setStroke(new BasicStroke(3));
@@ -325,7 +330,7 @@ class theFrame extends JFrame {
 		// reset nodes:
 		nCount = 0;
 		for (int i = 0; i < 100; i++) {
-			nod.nodName[i] = null;
+			nod.nodName[i] = "null";
 			nod.Nxy[i][0] = 0;
 			nod.Nxy[i][1] = 0;
 		}
@@ -411,7 +416,8 @@ class theFrame extends JFrame {
 					nod.Nxy[i][0] = Integer.parseInt(input.readLine());
 					nod.Nxy[i][1] = Integer.parseInt(input.readLine());
 					
-					nod.ellipses[i] = new Ellipse2D.Double(nod.Nxy[i][0],nod.Nxy[i][1], 30, 30);
+					if( !nod.nodName[i].equals("null") && (nod.Nxy[i][0] !=0  && nod.Nxy[i][1] != 0) )
+					   nod.ellipses[i] = new Ellipse2D.Double(nod.Nxy[i][0],nod.Nxy[i][1], 30, 30);
 				}
 			
 				// read line:		reads 30 lines
@@ -421,7 +427,8 @@ class theFrame extends JFrame {
 					Ln.Lxy[i][1] = Integer.parseInt(input.readLine());
 					Ln.Lxy[i][2] = Integer.parseInt(input.readLine());
 					Ln.Lxy[i][3] = Integer.parseInt(input.readLine());
-					Ln.lines[i] = new Line2D.Double(Ln.Lxy[i][0]+15, Ln.Lxy[i][1]+15,Ln.Lxy[i][2]+15, Ln.Lxy[i][3] +15);
+					if( Ln.Lvalue[i] != 0) 
+					   Ln.lines[i] = new Line2D.Double(Ln.Lxy[i][0]+15, Ln.Lxy[i][1]+15,Ln.Lxy[i][2]+15, Ln.Lxy[i][3] +15);
 				}
 			}
 			
@@ -507,6 +514,8 @@ class theFrame extends JFrame {
 					B_load.setEnabled(true);
 				break;
 			case 15:		// B_load
+				resetGraph();
+				repaint();
 				loadGraph(T_load);
 				repaint();
 				break;
@@ -514,12 +523,17 @@ class theFrame extends JFrame {
 				
 			case 16:		// B_reset
 				resetGraph();
+				getContentPane().removeAll();
+				addButtons();
 				repaint();
 				break;
 			case 17:		// B_random
 				resetGraph();
-				int numNodes = 6;
-				int numLines = 12;
+				getContentPane().removeAll();
+				addButtons();
+				int numNodes = 5;
+				// maximum lines
+				int numLines = 7;
 				 
 				nod.randomVals(numNodes, numLines);
 				Ln.linesFromMatrix(nod.aMatrix, nod.Nxy , numNodes);
@@ -529,10 +543,6 @@ class theFrame extends JFrame {
 				repaint();
 				
 				break;
-				
-				
-			
-				
 				
 			}
 		}
