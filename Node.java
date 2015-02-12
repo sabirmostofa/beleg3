@@ -95,7 +95,7 @@ class Node {
 	//end randomVals
 	
 	public void printVals(){
-		System.out.println("Prining Node coordinates");
+		System.out.println("Printing Node coordinates");
 		System.out.println("========================");
 		
 		for(int i = 0; i < nodeCount; i++){
@@ -105,7 +105,7 @@ class Node {
 		}
 		
 		System.out.println();
-		System.out.println("Prining Adjacency Matrix");
+		System.out.println("Printing Adjacency Matrix");
 		System.out.println("========================");
 		
 		System.out.print("     ");
