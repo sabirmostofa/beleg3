@@ -1,9 +1,13 @@
 import java.awt.geom.Line2D;
 
-
+/*
+ * Creates a line:
+ * - Lvalue: lines can carry a user given value.
+ * - Lxy:	 coordinates for the lines
+ */
 class Line {
-	public int[] Lvalue;			// Value
-	public int[][] Lxy;				// X / Y of both start and end of line.
+	public int[] Lvalue;
+	public int[][] Lxy;
 	public Line2D[] lines;
 	public Line() {
 		Lvalue = new int[300];	
@@ -11,6 +15,12 @@ class Line {
 		lines = new Line2D[300];
 	}
 
+	/**
+	 * Creates lines from given Adjacency matrix, nodes with coordinates and the number of of nodes
+	 * @param m
+	 * @param nodes
+	 * @param nodeNum
+	 */
 	
 	public void linesFromMatrix(int[][] m, int[][] nodes,int nodeNum){
 		int length = nodeNum;

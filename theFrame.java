@@ -26,9 +26,9 @@ import javax.swing.JTextField;
 class theFrame extends JFrame {
 	
 	// Initialize Variable:
-	public JButton 		B_nodeMk, B_nodeRm, B_lineMk, B_lineRm, B_save, B_load, B_reset, B_random, B_AdjMatrix;
+	public JButton 		B_nodeMk, B_nodeRm, B_lineMk, B_lineRm, B_save, B_load, B_reset, B_random, B_AdjMatrix, B_short;
 	public JTextField 	T_nodeMk, T_nodeRm, T_lineMk_name, T_lineMk_start, T_lineMk_dest,
-					  	T_lineRm_start, T_lineRm_dest, T_save, T_load;
+					  	T_lineRm_start, T_lineRm_dest, T_save, T_load, Short_node, Short_node2;
 	public JLabel 		L_start, L_start2, L_dest, L_dest2;
 	public Node nod = new Node();
 	public Line Ln = new Line();
@@ -94,9 +94,20 @@ class theFrame extends JFrame {
 		B_nodeRm.setBounds(480,115,200,30);
 		B_nodeRm.setBackground(Color.gray.brighter());
 	    B_nodeRm.addActionListener(new Action(7));
+	    
+	    // shortest path
+	    
+	    add(Short_node = new JTextField(15));
+		Short_node.setBounds(480,25,90,30);
 		
-		//add(B_lineRm = new JButton("Delete Line"));
-		//B_lineRm.setBounds(625,55,125,30);
+	    add(Short_node2 = new JTextField(15));
+		Short_node2.setBounds(590,25,90,30);
+		
+		add(B_short = new JButton("Get shortest path"));
+		B_short.setBounds(480,60,200,30);
+		B_short.setBackground(Color.gray.brighter());
+		B_short.addActionListener(new Action(50));
+		
 		//B_lineRm.setBackground(Color.gray.brighter());
 	//	B_lineRm.addActionListener(new Action(1));
 		
@@ -141,11 +152,11 @@ class theFrame extends JFrame {
 		add(B_random = new JButton("Random"));
 		B_random.setBounds(850,115,125,30);
 		B_random.setBackground(Color.gray.brighter());
-	    B_random.addActionListener(new Action(17));			// show description of each node.
+	    B_random.addActionListener(new Action(17));	
 		add(B_AdjMatrix = new JButton("Adj. Matrix"));
 		B_AdjMatrix.setBounds(1025,115,125,30);
 		B_AdjMatrix.setBackground(Color.gray.brighter());
-	//	B_AdjMatrix.addActionListener(new Action(1));
+	    B_AdjMatrix.addActionListener(new Action(20));
 		
 		
 	}
@@ -214,6 +225,7 @@ class theFrame extends JFrame {
 					
 				}
 	           
+	           nod.generateVars(Ln);
 	         
 				
 				
@@ -235,6 +247,7 @@ class theFrame extends JFrame {
 			
 			B_nodeMk.setEnabled(false);
 			mouseOn = false;
+			nod.generateVars(Ln);
 			repaint();
 		}
 	}
@@ -318,14 +331,16 @@ class theFrame extends JFrame {
 	}
 	
 	/**
-	 * saves the line value to line 2D object
+	 * Saves the line value to line 2D object
 	 */
 	public void saveLine(){
-		
 		Ln.lines[lCount] = new Line2D.Double(Ln.Lxy[lCount][0]+15, Ln.Lxy[lCount][1]+15,Ln.Lxy[lCount][2]+15, Ln.Lxy[lCount][3] +15);
-		
 	}
 	
+	/*
+	 * Resets all painted elements, given values, names and coordinates.
+	 * Additionally, it prints the operation on the console.
+	 */
 	public void resetGraph() {
 		// reset nodes:
 		nCount = 0;
@@ -347,22 +362,13 @@ class theFrame extends JFrame {
 		System.out.println("--------Reseted lines");
 	}
 	
-	public void deleteNode(TextField TF_node) {
-		for (int i = 0; i < nCount; i++) {
-			if (nod.nodName[i].equals(TF_node.getText()) ) {
-				
-			}
-		}
-	}
-	
-	public void adjMatrix() {
-		 
-	}
-	
-	public void randomness() {
-		
-	}
-	
+	/*
+	 * Saves the painted elements and its values / names in a text-file.
+	 * Additionally, it prints the operation on the console.
+	 * 
+	 * @param TF_save		Uses the text field on the left side of the 
+	 * 						save button for the name of the text-file.
+	 */
 	public void saveGraph(JTextField TF_save) {
 		String fileName = TF_save.getText();
 		try {
@@ -372,15 +378,15 @@ class theFrame extends JFrame {
 			print.println("" + nCount);	
 			print.println("" + lCount);	
 			
-			// save node: saves 10 nodes
-			for (int i = 0; i < 10; i++) {
+			// save node: saves 20 nodes
+			for (int i = 0; i < 20; i++) {
 				print.println("" + nod.nodName[i]);
 				print.println("" + nod.Nxy[i][0]);
 				print.println("" + nod.Nxy[i][1]);
 			}
 			
-			// save lines:	saves 30 lines
-			for (int i = 0; i < 30; i++) {
+			// save lines:	saves 60 lines
+			for (int i = 0; i < 60; i++) {
 				print.println("" + Ln.Lvalue[i]);
 				print.println("" + Ln.Lxy[i][0]);
 				print.println("" + Ln.Lxy[i][1]);
@@ -392,13 +398,18 @@ class theFrame extends JFrame {
 			System.out.println("*****Graph saved");
 		}
 		catch (IOException iox) {
-			System.out.println("Problem wrinting " + fileName);
+			System.out.println("Problem writing " + fileName);
 		}
 	}
 	
-	
-	
-	
+	/*
+	 * Loads a specific text-file to print the graph.
+	 * Additionally, it prints the operation on the console.
+	 * 
+	 * @param TF_load		the specific text-file given by the user by
+	 * 						writing on the text field on the left of the 
+	 * 						load-button.
+	 */
 	public void loadGraph(JTextField TF_load) {
 		String fileName = TF_load.getText();;
 		
@@ -410,8 +421,8 @@ class theFrame extends JFrame {
 				nCount = Integer.parseInt(input.readLine());	
 				lCount = Integer.parseInt(input.readLine());
 				
-				// read node:		reads 10 nodes
-				for (int i = 0; i < 10; i ++) {
+				// read node:		reads 20 nodes
+				for (int i = 0; i < 20; i ++) {
 					nod.nodName[i] = input.readLine();
 					nod.Nxy[i][0] = Integer.parseInt(input.readLine());
 					nod.Nxy[i][1] = Integer.parseInt(input.readLine());
@@ -420,8 +431,8 @@ class theFrame extends JFrame {
 					   nod.ellipses[i] = new Ellipse2D.Double(nod.Nxy[i][0],nod.Nxy[i][1], 30, 30);
 				}
 			
-				// read line:		reads 30 lines
-				for (int i = 0; i < 30; i++) {
+				// read line:		reads 60 lines
+				for (int i = 0; i < 60; i++) {
 					Ln.Lvalue[i] = Integer.parseInt(input.readLine());
 					Ln.Lxy[i][0] = Integer.parseInt(input.readLine());
 					Ln.Lxy[i][1] = Integer.parseInt(input.readLine());
@@ -430,7 +441,11 @@ class theFrame extends JFrame {
 					if( Ln.Lvalue[i] != 0) 
 					   Ln.lines[i] = new Line2D.Double(Ln.Lxy[i][0]+15, Ln.Lxy[i][1]+15,Ln.Lxy[i][2]+15, Ln.Lxy[i][3] +15);
 				}
+				
+				
 			}
+			
+			
 			
 			catch (EOFException eof) {				// Reads Integers until EOF.
 				System.out.println("EOF reached");
@@ -440,6 +455,10 @@ class theFrame extends JFrame {
 		catch (IOException iox) {
 			System.out.println("Problem reading " + fileName);
 		}
+		
+		//genereate variables
+		nod.generateVars(Ln);
+		
 		System.out.println("*****Graph loaded");
 	}
 		
@@ -466,6 +485,7 @@ class theFrame extends JFrame {
 				break;
 			case 2:			// B_nodeMk
 				mouseOn = true;
+				nod.generateVars(Ln);
 				break;
 			case 3:			// T_lineMk_value
 				checkLineMk = true;
@@ -487,6 +507,7 @@ class theFrame extends JFrame {
 				saveLine();
 				lCount++;
 				B_lineMk.setEnabled(false);
+				nod.generateVars(Ln);
 				repaint();
 				break;
 			case 7:			// T_nodeRm
@@ -494,7 +515,6 @@ class theFrame extends JFrame {
 				break;
 				
 			case 8:			// B_nodeRm
-				
 				
 			case 9:			// B_lineRm
 				
@@ -519,8 +539,6 @@ class theFrame extends JFrame {
 				loadGraph(T_load);
 				repaint();
 				break;
-				
-				
 			case 16:		// B_reset
 				resetGraph();
 				getContentPane().removeAll();
@@ -531,17 +549,25 @@ class theFrame extends JFrame {
 				resetGraph();
 				getContentPane().removeAll();
 				addButtons();
-				int numNodes = 10;
+				int numNodes = 9;
 				// maximum lines
-				int numLines = 15;
+				int numLines = 14;
 				 
 				nod.randomVals(numNodes, numLines);
 				Ln.linesFromMatrix(nod.aMatrix, nod.Nxy , numNodes);
 				lCount = nod.lineCount;
 				nCount = numNodes;
 				nod.printVals();
+				nod.BFS_Start("B", "D" , nod.aMatrix, nod.nodName);
 				repaint();
-				
+				break;
+			case 20: // print adjacent matrix
+				nod.printVals();
+				break;
+			case 50: // get shortest path
+				String a = Short_node.getText();
+				String b = Short_node2.getText();
+				nod.BFS_Start(a, b , nod.aMatrix, nod.nodName);
 				break;
 				
 			}

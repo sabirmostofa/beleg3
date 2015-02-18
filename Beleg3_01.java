@@ -8,17 +8,17 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 
 /*
- * Beleg3 @version 1.2 
+ * Beleg3 @version 1.3 
  * 
  * Updates: (functional)	
- * - nodes and lines buttons
- * - Reset button
- * - save and load buttons
  * 
  * Needs to be implemented:
- * - remove nodes and lines
- * - random button
  * - example graph
+ * 
+ * Documentation notes:
+ * - write how many nodes / lines can be saved. (20 nodes, 60 lines).
+ * - needs documentation: Node.java (Method: cleanNulls() and randomVals() ).
+ * - maxN, points, ramovedNxy not used (in Node.java)
  * 
  */
 
